@@ -1,3 +1,10 @@
+/*
+
+마이크로컨트롤러 과제
+Author : SeongHa Ahn
+Github : https://github.com/SeonghaAHN
+
+*/
 
 #include <mega128a.h>
 #include <delay.h>
