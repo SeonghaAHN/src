@@ -1,0 +1,46 @@
+# yolo keras label format row : image_file_path box1 box2 ... boxN
+#                         box : x_min,y_min,x_max,y_max,class_id
+
+from xml.dom import minidom
+import os
+import glob
+
+path = os.getcwd()
+class_id = 1
+
+def convert_xml2yolo(class_id):
+    #xml name + txt
+    fname_out = ('test'+'.txt')
+
+    #get number of xml file
+    for fname in glob.glob("*.xml"):
+        
+        #parsing
+        xmldoc = minidom.parse(fname)
+        
+        with open(fname_out, "w") as f:
+
+            itemlist = xmldoc.getElementsByTagName('object')
+            #size = xmldoc.getElementsByTagName('size')[0]
+            #width = int((size.getElementsByTagName('width')[0]).firstChild.data)
+            #height = int((size.getElementsByTagName('height')[0]).firstChild.data)
+
+            for item in itemlist:
+                # get class label
+                classid =  (item.getElementsByTagName('name')[0]).firstChild.data
+
+                # get bbox coordinates
+                xmin = ((item.getElementsByTagName('bndbox')[0]).getElementsByTagName('xmin')[0]).firstChild.data
+                ymin = ((item.getElementsByTagName('bndbox')[0]).getElementsByTagName('ymin')[0]).firstChild.data
+                xmax = ((item.getElementsByTagName('bndbox')[0]).getElementsByTagName('xmax')[0]).firstChild.data
+                ymax = ((item.getElementsByTagName('bndbox')[0]).getElementsByTagName('ymax')[0]).firstChild.data
+
+                f.write( path + "/" + fname + " " + xmin + "," + ymin + "," + xmax + "," + ymax  + " " + class_id + '\n')
+
+    print ("wrote %s" % fname_out)
+
+def main():
+    convert_xml2yolo(class_id)
+
+if __name__ == '__main__':
+    main()
